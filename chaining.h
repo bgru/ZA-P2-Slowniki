@@ -20,7 +20,7 @@ public:
 
     bool find(int key) {
         int index = hashFunction(key);
-        for (int i = 0; i < table[index].size(); i++) {
+        for (int  1i = 0; i < table[index].size(); i++) {
             if (table[index][i] == key) {
                 return true;
             }
