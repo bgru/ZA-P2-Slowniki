@@ -23,7 +23,10 @@
     <ClInclude Include="chaining.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="Open Adres.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Testing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

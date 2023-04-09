@@ -143,7 +143,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="chaining.h" />
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="Testing.h" />
+    <ClInclude Include="Open Adres.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,26 +1,28 @@
 #include "chaining.h"
+#include "Testing.h"
+#include "Open Adres.h"
 
 int main() {
-    HashDict hashDict;
+    //try
+    //{
+    //graph_chaining(1000000);
+    //}
+    //catch (const std::exception& e)
+    //{
+    //    cerr << "An error occurred: " << e.what() << '\n';
+    //}
 
-    hashDict.insert(5);
-    hashDict.insert(10);
-    hashDict.insert(15);
-
-    cout << "Is 5 in the hash dictionary? " << (hashDict.find(5) ? "Yes" : "No") << endl;
-    cout << "Is 20 in the hash dictionary? " << (hashDict.find(20) ? "Yes" : "No") << endl;
-
-    hashDict.remove(10);
-
-    cout << "Is 10 in the hash dictionary? " << (hashDict.find(10) ? "Yes" : "No") << endl;
-
+    cout << "Choose method:\n1.Chaining\n2.Open Adressing\n";
+    int choice; cin >> choice;
+    cout << "Numbers of element to be hashed\n";
+    int testScale; cin >> testScale;
+    if (choice == 1)
+    {
+        testChaining(testScale);
+    }
+    else {
+        testOpen(testScale);
+    }
+    
     return 0;
 }
-
-//implement a hash dictionary in c++, that solves collisions using chaining
-//its should consist of 3 functions:
-//1. find - finds an element
-//2. insert - that inserts an element
-//3. delete - deletes the element
-//
-//the dictionary should implement positive integes and should not contain duplicates
