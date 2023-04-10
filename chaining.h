@@ -4,8 +4,97 @@
 #include <functional>
 #include <stdexcept>
 #include <string>
+#include <list>
+#include <utility>
 
 using namespace std;
+
+template<typename K, typename V>
+class ChainingHashDictionary {
+private:
+    std::vector<std::list<std::pair<K, V>>> dict;
+    double maxLoadFactor;
+    double minLoadFactor;
+    size_t size;
+
+    void rehash(bool increase) {
+        int newTableSize = dict.size();
+        if (increase) {
+            newTableSize = 2 * dict.size();
+        }
+        else if (dict.size() > 10) {
+            newTableSize = dict.size() / 2;
+        }
+        else {
+            return; // cannot decrease table size below 10
+        }
+
+        ChainingHashDictionary<K, V> newDict(newTableSize, maxLoadFactor, minLoadFactor);
+        for (const auto& bucket : dict) {
+            for (const auto& kv : bucket) {
+                newDict.insert(kv.first, kv.second);
+            }
+        }
+        dict.swap(newDict.dict);
+    }
+
+public:
+    ChainingHashDictionary(size_t initialSize = 10, double maxLoadFactor = 0.7, double minLoadFactor = 0.2)
+        : maxLoadFactor(maxLoadFactor), minLoadFactor(minLoadFactor), size(0) {
+        dict.resize(initialSize);
+    }
+
+    V& find(const K& key) {
+        size_t idx = std::hash<K>{}(key) % dict.size();
+        for (auto& kv : dict[idx]) {
+            if (kv.first == key) {
+                return kv.second;
+            }
+        }
+        throw std::runtime_error("Key not found");
+    }
+
+    void remove(const K& key) {
+        size_t idx = std::hash<K>{}(key) % dict.size();
+        auto& bucket = dict[idx];
+        auto it = bucket.begin();
+        while (it != bucket.end()) {
+            if (it->first == key) {
+                bucket.erase(it);
+                size--;
+                if (static_cast<double>(size) / dict.size() < minLoadFactor) {
+                    rehash(false);
+                }
+                return;
+            }
+            ++it;
+        }
+        throw std::runtime_error("Key not found");
+    }
+
+    void insert(const K& key, const V& value) {
+        if (static_cast<double>(size + 1) / dict.size() > maxLoadFactor) {
+            rehash(true);
+        }
+        size_t idx = std::hash<K>{}(key) % dict.size();
+        for (auto& kv : dict[idx]) {
+            if (kv.first == key) {
+                kv.second = value;
+                return;
+            }
+        }
+        dict[idx].push_back(std::make_pair(key, value));
+        size++;
+    }
+};
+
+
+
+
+
+
+
+// legacy code here :
 
 template<typename K>
 class ChainDict {
@@ -14,7 +103,7 @@ class ChainDict {
     const double maxLoadFactor = 0.7;
     const double minLoadFactor = 0.2;
     vector<vector<K>> table;
-    int numKeys = 0;
+    unsigned int numKeys = 0;
 
     unsigned int hashFunction(K key)
     {
