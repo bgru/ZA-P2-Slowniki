@@ -10,7 +10,7 @@
 using namespace std;
 
 template<typename K, typename V>
-class ChainingHashDictionary {
+class ChainDict2 {
 private:
     std::vector<std::list<std::pair<K, V>>> dict;
     double maxLoadFactor;
@@ -29,7 +29,7 @@ private:
             return; // cannot decrease table size below 10
         }
 
-        ChainingHashDictionary<K, V> newDict(newTableSize, maxLoadFactor, minLoadFactor);
+        ChainDict2<K, V> newDict(newTableSize, maxLoadFactor, minLoadFactor);
         for (const auto& bucket : dict) {
             for (const auto& kv : bucket) {
                 newDict.insert(kv.first, kv.second);
@@ -39,7 +39,7 @@ private:
     }
 
 public:
-    ChainingHashDictionary(size_t initialSize = 10, double maxLoadFactor = 0.7, double minLoadFactor = 0.2)
+    ChainDict2(size_t initialSize = 10, double maxLoadFactor = 0.7, double minLoadFactor = 0.2)
         : maxLoadFactor(maxLoadFactor), minLoadFactor(minLoadFactor), size(0) {
         dict.resize(initialSize);
     }
