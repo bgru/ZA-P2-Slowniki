@@ -108,7 +108,7 @@ void testOpen(unsigned int testScale) {
     if (cond == 'Y' || cond == 'y') {
         cout << "using robin hood hashing...\n";
         for (unsigned int i = 0; i < testScale; ++i) {
-            hashDict.RH_insert(testValues[i], "value" + i);
+            hashDict.RH_insert(testValues[i], "value" + to_string(i));
             //cout << testValues[i] << (i + 1 % 10 == 0 ? "\n" : "\t");
             cout << i << ".  " << testValues[i] << "\n";
         }
@@ -116,7 +116,7 @@ void testOpen(unsigned int testScale) {
     else{
         cout << "hail the rich!\n";
         for (unsigned int i = 0; i < testScale; ++i) {
-            hashDict.insert(testValues[i], "value"+i);
+            hashDict.insert(testValues[i], "value" + to_string(i));
             //cout << testValues[i] << (i + 1 % 10 == 0 ? "\n" : "\t");
             cout << i << ".  " << testValues[i] << "\n";
         }

@@ -3,6 +3,7 @@
 #include "Open Adres.h"
 
 int main() {
+
     //try
     //{
     //graph_chaining(1000000);
