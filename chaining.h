@@ -12,10 +12,10 @@ using namespace std;
 template<typename K, typename V>
 class ChainDict2 {
 private:
-    std::vector<std::list<std::pair<K, V>>> dict;
-    double maxLoadFactor;
-    double minLoadFactor;
-    size_t size;
+    vector<list<pair<K, V>>> dict;
+    double maxLoadFactor = 0.7;
+    double minLoadFactor = 0.2;
+    size_t numKeys;
 
     void rehash(bool increase) {
         int newTableSize = dict.size();
@@ -29,29 +29,30 @@ private:
             return; // cannot decrease table size below 10
         }
 
-        ChainDict2<K, V> newDict(newTableSize, maxLoadFactor, minLoadFactor);
+        ChainDict2<K, V> newDict(newTableSize);
         for (const auto& bucket : dict) {
             for (const auto& kv : bucket) {
                 newDict.insert(kv.first, kv.second);
             }
         }
+        cout << "REHASHING DONE, TABLE SIZE: NEW:" << newTableSize << "\tOLD:" << dict.size() << '\n';
         dict.swap(newDict.dict);
+
     }
 
 public:
-    ChainDict2(size_t initialSize = 10, double maxLoadFactor = 0.7, double minLoadFactor = 0.2)
-        : maxLoadFactor(maxLoadFactor), minLoadFactor(minLoadFactor), size(0) {
+    ChainDict2(size_t initialSize){
         dict.resize(initialSize);
     }
 
-    V& find(const K& key) {
+    bool find(const K& key) {
         size_t idx = std::hash<K>{}(key) % dict.size();
         for (auto& kv : dict[idx]) {
             if (kv.first == key) {
-                return kv.second;
+                return true;
             }
         }
-        throw std::runtime_error("Key not found");
+        return false;
     }
 
     void remove(const K& key) {
@@ -61,19 +62,20 @@ public:
         while (it != bucket.end()) {
             if (it->first == key) {
                 bucket.erase(it);
-                size--;
-                if (static_cast<double>(size) / dict.size() < minLoadFactor) {
+                numKeys--;
+                if (static_cast<double>(numKeys) / dict.size() < minLoadFactor) {
                     rehash(false);
                 }
+                cout << "key " << key << " removed\n\n";
                 return;
             }
             ++it;
         }
-        throw std::runtime_error("Key not found");
+        cout << "\nKey not found! Deleting aborted\n\n";
     }
 
     void insert(const K& key, const V& value) {
-        if (static_cast<double>(size + 1) / dict.size() > maxLoadFactor) {
+        if ((static_cast<double>(numKeys) + 1) / dict.size() > maxLoadFactor) {
             rehash(true);
         }
         size_t idx = std::hash<K>{}(key) % dict.size();
@@ -83,8 +85,12 @@ public:
                 return;
             }
         }
-        dict[idx].push_back(std::make_pair(key, value));
-        size++;
+        dict[idx].push_back(make_pair(key, value));
+        numKeys++;
+    }
+
+   size_t getTableSize() {
+        return numKeys;
     }
 };
 

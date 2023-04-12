@@ -12,7 +12,7 @@ using namespace std;
 
 void testChaining(unsigned int testScale) {
 
-    ChainDict<int> hashDict;        
+    ChainDict2<int, string> hashDict(10);        
 
     random_device rnd_device;                 // Create an instance of an engine.
     mt19937 mersenne_engine{ rnd_device() };  // Specify the engine and distribution.
@@ -41,7 +41,7 @@ void testChaining(unsigned int testScale) {
 
 
     for (unsigned int i = 0; i < testScale; ++i) {
-        hashDict.insert(testValues[i]);
+        hashDict.insert(testValues[i], "value " + to_string(i));
     }
 
     //cout << "printing the dictionary: \n";
@@ -63,6 +63,8 @@ void testChaining(unsigned int testScale) {
     for (unsigned int i = 0; i < unsigned int(testScale * percent); ++i) {
         hashDict.remove(testValues[i]);
     }
+
+    cout << "Current table size is " << hashDict.getTableSize() << '\n';
 
     ////chose random values to be deleted
     //vector<int> testIndexes;
