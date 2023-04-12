@@ -41,7 +41,7 @@ private:
     }
 
 public:
-    ChainDict2(size_t initialSize){
+    ChainDict2(size_t initialSize) : numKeys(initialSize){
         dict.resize(initialSize);
     }
 
@@ -100,7 +100,7 @@ public:
 
 
 
-// legacy code here :
+// legacy code for graph here :
 
 template<typename K>
 class ChainDict {
